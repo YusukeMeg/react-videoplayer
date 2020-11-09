@@ -1,4 +1,21 @@
-import { createContext } from 'react';
+import { createContext ,useReducer } from 'react';
+import {PlayerReducer}  from "../reducers/PlayerReducer.js"
 
-const PlayerContext = createContext();
-export default player
+export const PlayerContext = createContext();
+
+const initialState = {
+  current_url: "",
+  videolist:[...Array(10)].map((e,i)=>("mark_arrow_reload")),
+  visibleList:[...Array(10)].map((e,i)=>("mark_arrow_reload"))
+};
+
+export const PlayerContextProvider = ({ children })=>{
+  const [state, dispatch] = useReducer(PlayerReducer, initialState);
+  return(
+    <PlayerContext.Provider value={{state, dispatch}}>
+      {children}
+    </PlayerContext.Provider>
+  )
+}
+
+export default PlayerContextProvider

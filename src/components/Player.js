@@ -1,15 +1,16 @@
 // import './App.css';
-import React, { useState , useEffect} from 'react';
-import AppContext from "../contexts/AppContext.js";
+import React, { useState , useEffect , useContext ,Fragment} from 'react';
+import {PlayerContext} from "../contexts/PlayerContext.js";
 
-function Player(props) {
-  const player = AppContext;
+function Player() {
+  // const player = PlayerContext;
+  const {state:{current_url}, dispatch} = useContext(PlayerContext);
   return (
-    <AppContext.Consumer>
-      <video controls>
-        <source src={player.current_play}></source>
+    <Fragment>
+      <video controls >
+        <source src={current_url}></source>
       </video>
-    </AppContext.Consumer>
+    </Fragment>
 
   );
 }
