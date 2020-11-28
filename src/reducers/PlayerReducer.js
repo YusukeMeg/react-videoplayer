@@ -8,6 +8,11 @@ export const PlayerReducer = (state, action) => {
             ...state,
             current_url: action.payload
           })
+        case 'RESET_PLAYURL':
+          return({
+            ...state,
+            current_url: ""
+          })
         case 'UPDATE_VIDEOLIST':
           return({
             ...state,
@@ -18,6 +23,11 @@ export const PlayerReducer = (state, action) => {
           return({
             ...state,
             visibleList: action.payload
+          })
+        case 'REVERSE_VIDEO_LIST':
+          return({
+            ...state,
+            videolist: state.videolist.reverse()
           })
 
         default:

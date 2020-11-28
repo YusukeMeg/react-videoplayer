@@ -1,0 +1,14 @@
+video {
+    width: 500px;
+    left: 0;
+}
+
+
+.canvas canvas{
+    width: 200px;
+}
+.player{
+    z-index: 1;
+    position: fixed;
+    top: 25px;
+}

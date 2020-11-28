@@ -1,4 +1,4 @@
-// import './App.css';
+import './VideoList.css';
 import React, { useState , useEffect , useContext , Fragment} from 'react';
 import {PlayerContext} from "../contexts/PlayerContext.js";
 import Player from "../components/Player.js"
@@ -8,31 +8,33 @@ import { Link, useHistory } from 'react-router-dom'
 function VideoList() {
   const {state:{current_url,videolist,visibleList}, dispatch} = useContext(PlayerContext);
   const history = useHistory();
+  const [selectedQuality, setSelectedQuality] = useState();
+  const [listReverse,setListReverse] = useState(false);
   useEffect(async () => {
     const result = await fetch(
-      'http://localhost:3000/api/videolist.json',
+      'api/list',
     ).then(res=>{
       return res.json()
     });
-    await new Promise((resolve)=>{
-      setTimeout(()=>{
-        resolve()
-      },3000)
-    })
+    // await new Promise((resolve)=>{
+    //   setTimeout(()=>{
+    //     resolve()
+    //   },3000)
+    // })
     dispatch({
       type:"UPDATE_VIDEOLIST",
-      payload:result.data
+      payload:result
     })
   }, []);
 
   const updateCurrentPlay = (e)=>{
-    const url = `video/${e}.MOV`;
+    const url = `api/video/${e.name}`;
     dispatch({
       type: "UPDATE_PLAYURL",
       payload: url
     })
 
-    history.push("/player")
+    // history.push("/player")
   }
   const sortList = (e)=>{
     dispatch({
@@ -41,16 +43,48 @@ function VideoList() {
     })
   }
 
+  const resetCurrentPlay= ()=>{
+    dispatch({
+      type: "RESET_PLAYURL"
+    })
+
+  }
+  const toggleOrder = ()=>{
+      dispatch({
+        type:"REVERSE_VIDEO_LIST"
+      })
+      setListReverse(!listReverse)
+  }
+
   return (
     <Fragment>
-      <Link to='/player'>link</Link>
-      <button onClick={sortList}>limit</button>
-      {visibleList.map((e,i)=>{
-        const thumbs_url = `thumbs/${e}.jpg`
-        return(
-          <img key={i} src={thumbs_url} onClick={()=>updateCurrentPlay(e)} width="320" height="240"/>
-        )
-      })}
+      <Link to='/manage'>link</Link>
+      <div className="menu">
+        <button onClick={sortList}>limit</button>
+        <select onChange={(event)=>{
+            console.log(event.target.value)
+            setSelectedQuality(event.target.value);
+            }}>
+          <option value="">All</option>
+          <option value="480P">480P</option>
+          <option value="720P">720P</option>
+          <option value="1080P">1080P</option>
+          <option value="1440P">1440P</option>
+        </select>
+        <button onClick={toggleOrder}>{listReverse?"△":"▽"}</button>
+        <button onClick={resetCurrentPlay}> close player</button>
+      </div>
+
+
+      { visibleList
+        .filter(e=>(!selectedQuality||e.quality == selectedQuality))
+        .map((e,i)=>{
+          const thumbs_url = e.thumnale;
+          return(
+            <img key={i} src={thumbs_url} onClick={()=>updateCurrentPlay(e)} width="320" height="240"/>
+          )
+        }
+      )}
       {current_url &&
         <Player />
       }
