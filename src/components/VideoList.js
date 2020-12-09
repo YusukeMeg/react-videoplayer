@@ -75,16 +75,25 @@ function VideoList() {
         <button onClick={resetCurrentPlay}> close player</button>
       </div>
 
+      <div className="video_list">
+        { visibleList
+          .filter(e=>(!selectedQuality||e.quality == selectedQuality))
+          .map((e,i)=>{
+            const thumbs_url = e.thumnale;
+            return(
+              <div className="video_thum" key={i} >
+                <img src={thumbs_url} onClick={()=>updateCurrentPlay(e)}/>
+                <div className="video_quality">
+                  <span>{e.quality}</span>
+                </div>             
+                
+              </div>
+            )
+          }
+        )}
 
-      { visibleList
-        .filter(e=>(!selectedQuality||e.quality == selectedQuality))
-        .map((e,i)=>{
-          const thumbs_url = e.thumnale;
-          return(
-            <img key={i} src={thumbs_url} onClick={()=>updateCurrentPlay(e)} width="320" height="240"/>
-          )
-        }
-      )}
+      </div>
+
       {current_url &&
         <Player />
       }

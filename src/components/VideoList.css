@@ -1,4 +1,26 @@
 .menu {
     position: sticky;
     top: 0px;
+    z-index: 2;
+}
+.video_list{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.video_thum{
+    width: 320px;
+    height: 240px;
+    position: relative;
+}
+.video_thum img{
+    width: 320px;
+    height: 240px;
+}
+.video_quality{
+    position: absolute;
+    background-color: whitesmoke;
+    bottom: 5px;
+    right: 5px;
+    z-index: 1;
 }
